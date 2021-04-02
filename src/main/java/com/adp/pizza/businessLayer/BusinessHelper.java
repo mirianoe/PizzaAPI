@@ -13,6 +13,7 @@ public class BusinessHelper {
         PizzaDTO pizzaDTO = new PizzaDTO();
         pizzaDTO.setId(pizza.getId());
         pizzaDTO.setName(pizza.getName());
+        pizzaDTO.setFavorite(pizza.isFavorite());
         pizzaDTO.setToppings(new ArrayList<>(pizza.getToppings()));
         pizzaDTO.setPhotoName(pizza.getPhotoName());
         return pizzaDTO;

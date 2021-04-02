@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -31,7 +32,7 @@ public class Pizza implements Serializable {
     @Size(max = 64)
     private String photoName;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "pizzas_toppings",
             joinColumns = @JoinColumn(
@@ -39,6 +40,22 @@ public class Pizza implements Serializable {
             inverseJoinColumns = @JoinColumn(
                     name = "topping_id", referencedColumnName = "topping_id"))
     @JsonIgnore
+    @Setter(AccessLevel.NONE)
     private Set<Topping> toppings = new HashSet<>(0);
+
+    private boolean favorite;
+
+    public void addToppings(List<Topping> toppings) {
+        toppings.forEach(this::addTopping);
+    }
+
+    public void addTopping(Topping topping) {
+        toppings.add(topping);
+        topping.getPizzas().add(this);
+    }
+
+    public void removeAllToppings() {
+        toppings.clear();
+    }
 
 }
